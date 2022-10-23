@@ -30,6 +30,7 @@ public class Application {
         menu.append("0. Analyser un nouveau projet.\n");
         menu.append("1. Générer un graphe d'appel.\n");
         menu.append("2. Calculer le couplage entre deux classes.\n");
+        menu.append("3. Générer un graphe de couplage pondéré.\n");
         menu.append("q. Quitter l’application.\n");
     }
 
@@ -50,6 +51,7 @@ public class Application {
      */
     private void chooseAFeatures(VisitDataCollector visitDataCollector) throws IOException, InterruptedException, EmptyProjectException, NotFoundPathProjectException {
         String choice = "";
+        String graphName;
         String classe1;
         String classe2;
         while (!choice.equals("quitter")) {
@@ -68,7 +70,9 @@ public class Application {
                 case "1":
                     System.err.println("Génération du graphe d'appel ...");
                     Thread.sleep(500);
-                    visitDataCollector.buildGraphWithJGraphT();
+                    System.out.print("Nom du graphe d'appel : ");
+                    graphName = sc.nextLine().trim();
+                    visitDataCollector.writeCallGraphInDotFile(graphName);
                     Thread.sleep(500);
                     System.out.println("Graphe d'appel généré !");
                     Thread.sleep(500);
@@ -81,6 +85,14 @@ public class Application {
                     System.out.print("classe2 : ");
                     classe2 = sc.nextLine().trim();
                     System.out.println(String.format("Couplage (%s, %s) = %f.", classe1, classe2, visitDataCollector.couplage(classe1, classe2)));
+                    Thread.sleep(500);
+                    break;
+                case "3":
+                    System.err.println("Génération du graphe de couplage pondéré ...");
+                    Thread.sleep(500);
+                    System.out.print("Nom du graphe de couplage pondéré : ");
+                    graphName = sc.nextLine().trim();
+                    visitDataCollector.writeWeightedCouplingGraphInDotFile(graphName);
                     Thread.sleep(500);
                     break;
                 case "q":
