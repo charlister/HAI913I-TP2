@@ -11,7 +11,7 @@ public class SimpleCluster implements ICluster {
     }
 
     @Override
-    public List<String> getClusterComponents() {
+    public List<String> getClusterClasses() {
         List<String> clusterComponents = new ArrayList<>();
         clusterComponents.add(this.cluster);
         return clusterComponents;

@@ -117,8 +117,8 @@ public class Processor {
     public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
         float result = 0;
 
-        List<String> monoClusters1 = cluster1.getClusterComponents();
-        List<String> monoClusters2 = cluster2.getClusterComponents();
+        List<String> monoClusters1 = cluster1.getClusterClasses();
+        List<String> monoClusters2 = cluster2.getClusterClasses();
 
         for (String classMonoClusters1 :
                 monoClusters1) {

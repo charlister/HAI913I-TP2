@@ -11,11 +11,11 @@ public class Cluster implements ICluster {
     }
 
     @Override
-    public List<String> getClusterComponents() {
+    public List<String> getClusterClasses() {
         List<String> clustersComponents = new ArrayList<>();
         for (ICluster cluster :
                 this.subClusters) {
-            clustersComponents.addAll(cluster.getClusterComponents());
+            clustersComponents.addAll(cluster.getClusterClasses());
         }
         return clustersComponents;
     }

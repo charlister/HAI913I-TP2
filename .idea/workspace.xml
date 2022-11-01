@@ -4,23 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="génération du graphe de couplage">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/FileData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/visitors/ImportDeclarationVisitor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/visitors/PackageDeclarationVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="correction de la génération des graphes et mise en place du dendrogramme sans paramètre.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Graph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/parser/MyParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/parser/MyParser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/processor/VisitDataCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/visitors/MethodInvocationVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/visitors/MethodInvocationVisitor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/visitors/TypeDeclarationVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/visitors/TypeDeclarationVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,23 +36,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/senio/IdeaProjects/ERL/A_Rendre/TP2/src/main/java",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.4816092"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/senio/IdeaProjects/ERL/A_Rendre/TP2/src/main/java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.4816092&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\senio\IdeaProjects\ERL\A_Rendre\TP2\src\main\java" />
@@ -112,7 +101,8 @@
       <workItem from="1666678140368" duration="3902000" />
       <workItem from="1666934096263" duration="19547000" />
       <workItem from="1667033991243" duration="26048000" />
-      <workItem from="1667287412649" duration="12392000" />
+      <workItem from="1667287412649" duration="15026000" />
+      <workItem from="1667332592340" duration="1928000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -128,7 +118,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666540307520</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="correction de la génération des graphes et mise en place du dendrogramme sans paramètre.">
+      <created>1667301628003</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1667301628003</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,6 +145,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="calcul du couplage entre 2 classes" />
     <MESSAGE value="génération du graphe de couplage" />
-    <option name="LAST_COMMIT_MESSAGE" value="génération du graphe de couplage" />
+    <MESSAGE value="correction de la génération des graphes et mise en place du dendrogramme sans paramètre." />
+    <option name="LAST_COMMIT_MESSAGE" value="correction de la génération des graphes et mise en place du dendrogramme sans paramètre." />
   </component>
 </project>
