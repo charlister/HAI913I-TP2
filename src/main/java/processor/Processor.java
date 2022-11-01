@@ -1,19 +1,18 @@
 package processor;
 
-import graph.Graph;
+import utils.cluster.*;
+import utils.Graph;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.Renderer;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.parse.Parser;
 import org.apache.commons.io.FileUtils;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 import exceptions.EmptyProjectException;
 import exceptions.NotFoundPathProjectException;
 import parser.MyParser;
+import utils.FileData;
 import visitors.*;
 
 import java.io.File;
@@ -22,71 +21,67 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
-public class VisitDataCollector {
+public class Processor {
+    private List<FileData> fileDataList;
     private Graph graph;
     private Set<String> linksCallGraph;
-    int numberOfMethodInvocationsBetween2Classes;
+    private Map<TypeDeclaration, Map<MethodDeclaration, List<MethodInvocation>>> mapTheCallGraph;
+
 
     /**
-     * Constructeur par défaut pour la classe {@link VisitDataCollector}
+     * Constructeur par défaut pour la classe {@link Processor}
      */
-    public VisitDataCollector() {
+    public Processor() {
         this.graph = new Graph();
         this.linksCallGraph = new HashSet<>();
-        this.numberOfMethodInvocationsBetween2Classes = 0;
+        this.mapTheCallGraph = new HashMap<>();
+        this.fileDataList = new ArrayList<>();
     }
 
+    /* EXERCICE 1 */
+
 //    BUILD GRAPH
-    private void collectGraphData(CompilationUnit cu) {
-        String callerClass = "", calleeClass = "";
 
-        TypeDeclarationVisitor visitorClass = new TypeDeclarationVisitor();
-        cu.accept(visitorClass);
-
-        for (TypeDeclaration nodeClass : visitorClass.getTypeDeclarationList()) {
+    private void collectGraphData() {
+        String calleeClass = "", callerClass = "", caller = "", callee = "";
+        for (FileData fileData : this.fileDataList) {
             MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
-            nodeClass.accept(visitorMethod);
+            fileData.getTypeDeclaration().accept(visitorMethod);
 
-            Map<MethodDeclaration, Set<MethodInvocation>> mapMethodDeclarationInvocation = new HashMap<>();
-            String caller;
-            callerClass = nodeClass.getName().toString();
+            callerClass = fileData.getTypeDeclarationName();
             this.graph.addNode(callerClass);
 
             for (MethodDeclaration nodeMethod : visitorMethod.getMethodDeclarationList()) {
-                nodeMethod.resolveBinding();
                 MethodInvocationVisitor visitorMethodInvocation = new MethodInvocationVisitor();
                 nodeMethod.accept(visitorMethodInvocation);
-                mapMethodDeclarationInvocation.put(nodeMethod, visitorMethodInvocation.getMethodInvocations());
 
                 caller = callerClass+"::"+nodeMethod.getName();
 
                 for (MethodInvocation methodInvocation : visitorMethodInvocation.getMethodInvocations()) {
-
-                    String callee;
-
+                    boolean b = false;
                     if (methodInvocation.getExpression() != null) {
                         if (methodInvocation.getExpression().resolveTypeBinding() != null) {
                             calleeClass = methodInvocation.getExpression().resolveTypeBinding().getName();
                             callee = calleeClass+"::"+methodInvocation.getName();
-
-                            linksCallGraph.add("\t\""+caller+"\"->\""+callee+"\"\n");
+                            b = true;
                         }
                     }
                     else if (methodInvocation.resolveMethodBinding() != null) {
                         calleeClass = methodInvocation.resolveMethodBinding().getDeclaringClass().getName();
                         callee = calleeClass+"::"+methodInvocation.getName();
-
-                        linksCallGraph.add("\t\""+caller+"\"->\""+callee+"\"\n");
+                        b = true;
                     }
                     else {
                         calleeClass = callerClass;
                         callee = calleeClass+"::"+methodInvocation.getName();
-
-                        linksCallGraph.add("\t\""+caller+"\"->\""+callee+"\"\n");
+                        b = true;
                     }
-
-                    this.graph.addNode(calleeClass);
-                    this.graph.addEdge(callerClass, calleeClass);
+                    if (b) {
+                        System.out.println("\""+caller+"\"->\""+callee+"\"\n");
+                        this.linksCallGraph.add("\""+caller+"\"->\""+callee+"\"\n");
+                        this.graph.addNode(calleeClass);
+                        this.graph.addEdge(fileData.getTypeDeclarationName(), calleeClass);
+                    }
                 }
             }
         }
@@ -103,11 +98,90 @@ public class VisitDataCollector {
         return a/b;
     }
 
+    /* EXERCICE 2 */
+/*
+
+    private float[][] generateCouplingClassesMatrix(List<String> classes) {
+        // gérer l'exception si la matrix est vide (n = 0, c'est-à-dire aucune classe dans l'appli.)
+        int n = classes.size();
+        float[][] couplingClassesMatrix = new float[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                couplingClassesMatrix[i][j] = this.couplage(classes.get(i), classes.get(j));
+            }
+        }
+        return couplingClassesMatrix;
+    }
+*/
+
+    public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
+        float result = 0;
+
+        List<String> monoClusters1 = cluster1.getClusterComponents();
+        List<String> monoClusters2 = cluster2.getClusterComponents();
+
+        for (String classMonoClusters1 :
+                monoClusters1) {
+            for (String classMonoClusters2 :
+                    monoClusters2) {
+                result += couplage(classMonoClusters1, classMonoClusters2);
+            }
+        }
+
+        result /= (monoClusters1.size()*monoClusters2.size());
+
+        return result;
+    }
+
+    public int[] clusterProche(List<ICluster> subClusters) {
+        int[] newBestClusterIndex = new int[2];
+        float couplageMax = -1;
+        int n = subClusters.size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j)
+                    continue;
+                float tmpCouplage = calculateCouplingBetweenClusters (subClusters.get(i), subClusters.get(j));
+                if (tmpCouplage > couplageMax) {
+                    newBestClusterIndex[0] = i;
+                    newBestClusterIndex[1] = j;
+                    couplageMax = tmpCouplage;
+                }
+            }
+        }
+        return newBestClusterIndex;
+    }
+
+    public ICluster clusteringHierarchic() {
+        int[] newBestClusterIndex;
+        Cluster mainCluster = new Cluster();
+        List<String> classes = graph.getNodes();
+        for (String className : classes) {
+            SimpleCluster simpleCluster = new SimpleCluster(className);
+            mainCluster.addCluster(simpleCluster);
+        }
+        while (mainCluster.getSubClusters().size() > 1) {
+            /*(c1, c2)*/
+            newBestClusterIndex = clusterProche(mainCluster.getSubClusters());
+            /*c3*/
+            Cluster newBestCluster = new Cluster();
+            newBestCluster.addCluster(mainCluster.getSubClusters().get(newBestClusterIndex[0]));
+            newBestCluster.addCluster(mainCluster.getSubClusters().get(newBestClusterIndex[1]));
+            /*enlever c1*/
+            mainCluster.getSubClusters().remove(newBestClusterIndex[0]);
+            /*enlever c2*/
+            mainCluster.getSubClusters().remove(newBestClusterIndex[1]-1);
+            /*ajouter c3*/
+            mainCluster.addCluster(newBestCluster);
+        }
+        return mainCluster.getSubClusters().get(0);
+    }
+
     // Draw/Display graph
 
     public void writeCallGraphInDotFile(String fileGraphPath) throws IOException {
         FileWriter fW = new FileWriter(fileGraphPath);
-        fW.write("digraph G {\n");
+        fW.write("digraph CallGraph {\n");
         for (String link : linksCallGraph) {
             fW.write(link);
         }
@@ -118,7 +192,8 @@ public class VisitDataCollector {
 
     public void writeWeightedCouplingGraphInDotFile(String fileGraphPath) throws IOException {
         FileWriter fW = new FileWriter(fileGraphPath);
-        fW.write("digraph G {\n");
+        fW.write("digraph CouplingGraph {\n");
+        fW.write("edge[dir=none]\n");
         for (Graph.Edge edge : graph.getEdges()) {
             fW.write(edge.getNode1()+"->"+edge.getNode2()+String.format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
@@ -146,6 +221,8 @@ public class VisitDataCollector {
 
 //    COLLECT DATA PROJECT
 
+
+
     /**
      * collecter l'ensemble des données souhaitées pour le TP.
      * @param pathProject chemin vers le projet à analyser.
@@ -163,7 +240,8 @@ public class VisitDataCollector {
             String content = FileUtils.readFileToString(javaFile);
             CompilationUnit cu = parser.parseSource(content.toCharArray());
 
-            collectGraphData(cu);
+            fileDataList.add(new FileData(cu));
         }
+        collectGraphData();
     }
 }

@@ -4,12 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="calcul du couplage entre 2 classes">
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="génération du graphe de couplage">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/FileData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/visitors/ImportDeclarationVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/visitors/PackageDeclarationVisitor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/graph/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/Graph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/processor/VisitDataCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/VisitDataCollector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/parser/MyParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/parser/MyParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/processor/VisitDataCollector.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/visitors/MethodInvocationVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/visitors/MethodInvocationVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/visitors/TypeDeclarationVisitor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/visitors/TypeDeclarationVisitor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +30,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -35,26 +47,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/senio/IdeaProjects/ERL/A_Rendre/TP2/src/main/java&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.4816092&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/senio/IdeaProjects/ERL/A_Rendre/TP2/src/main/java",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.4816092"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\senio\IdeaProjects\ERL\A_Rendre\TP2\src\main\java" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\senio\IdeaProjects\ERL\A_Rendre\TP2\generated_files" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="visitors" />
       <recent name="processor" />
       <recent name="parser" />
     </key>
@@ -89,7 +107,12 @@
       <updated>1666020909676</updated>
       <workItem from="1666020911120" duration="11614000" />
       <workItem from="1666255490998" duration="4613000" />
-      <workItem from="1666520906644" duration="16960000" />
+      <workItem from="1666520906644" duration="17861000" />
+      <workItem from="1666556004611" duration="555000" />
+      <workItem from="1666678140368" duration="3902000" />
+      <workItem from="1666934096263" duration="19547000" />
+      <workItem from="1667033991243" duration="26048000" />
+      <workItem from="1667287412649" duration="12392000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -98,7 +121,14 @@
       <option name="project" value="LOCAL" />
       <updated>1666262717603</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="génération du graphe de couplage">
+      <created>1666540307520</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1666540307520</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -117,6 +147,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="calcul du couplage entre 2 classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="calcul du couplage entre 2 classes" />
+    <MESSAGE value="génération du graphe de couplage" />
+    <option name="LAST_COMMIT_MESSAGE" value="génération du graphe de couplage" />
   </component>
 </project>

@@ -3,14 +3,16 @@ package visitors;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class MethodInvocationVisitor extends ASTVisitor {
-    Set<MethodInvocation> methodInvocations;
+    List<MethodInvocation> methodInvocations;
 
     public MethodInvocationVisitor() {
-        methodInvocations = new HashSet<>();
+        methodInvocations = new ArrayList<>();
     }
 
     @Override
@@ -19,7 +21,7 @@ public class MethodInvocationVisitor extends ASTVisitor {
         return super.visit(node);
     }
 
-    public Set<MethodInvocation> getMethodInvocations() {
+    public List<MethodInvocation> getMethodInvocations() {
         return methodInvocations;
     }
 }

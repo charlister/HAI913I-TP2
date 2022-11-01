@@ -53,9 +53,9 @@ public class MyParser {
     }
 
     /**
-     * Obtenir un AST Node pour l'extrait de code à analyser.
+     * Obtenir un AST ComplexNode pour l'extrait de code à analyser.
      * @param classSource un tableau de caractères relatifs à l'extrait de code à analyser.
-     * @return un AST Node pour la séquence de caractères représentant du code java.
+     * @return un AST ComplexNode pour la séquence de caractères représentant du code java.
      */
     public CompilationUnit parseSource(char[] classSource) {
         ASTParser parser = ASTParser.newParser(AST.JLS4);

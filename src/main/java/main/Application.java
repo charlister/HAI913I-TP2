@@ -2,7 +2,9 @@ package main;
 
 import exceptions.EmptyProjectException;
 import exceptions.NotFoundPathProjectException;
-import processor.VisitDataCollector;
+import processor.Processor;
+import utils.cluster.Cluster;
+import utils.cluster.ICluster;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -31,6 +33,7 @@ public class Application {
         menu.append("1. Générer un graphe d'appel.\n");
         menu.append("2. Calculer le couplage entre deux classes.\n");
         menu.append("3. Générer un graphe de couplage pondéré.\n");
+        menu.append("4. Générer un dendrogramme.\n");
         menu.append("q. Quitter l’application.\n");
     }
 
@@ -43,18 +46,18 @@ public class Application {
 
     /**
      * Cette méthode permet à l'utilisateur d'interagir avec l'application.
-     * @param visitDataCollector cet objet permet d'accéder à l'ensemble des données recueillies lors de l'analyse du projet.
+     * @param processor cet objet permet d'accéder à l'ensemble des données recueillies lors de l'analyse du projet.
      * @throws IOException
      * @throws InterruptedException
      * @throws EmptyProjectException
      * @throws NotFoundPathProjectException
      */
-    private void chooseAFeatures(VisitDataCollector visitDataCollector) throws IOException, InterruptedException, EmptyProjectException, NotFoundPathProjectException {
+    private void chooseAFeatures(Processor processor) throws IOException, InterruptedException, EmptyProjectException, NotFoundPathProjectException {
         String choice = "";
         String graphName;
         String classe1;
         String classe2;
-        while (!choice.equals("quitter")) {
+        while (!choice.equals("q")) {
             displayMenu();
             Thread.sleep(500);
             System.out.print("\nCHOISIR UNE OPTION : ");
@@ -63,16 +66,16 @@ public class Application {
                 case "0":
                     System.out.print("Veuillez indiquer le repertoire vers le nouveau projet à analyser : ");
                     String projectPath = sc.nextLine();
-                    VisitDataCollector newVisitDataCollector = new VisitDataCollector();
-                    newVisitDataCollector.makeAnalysis(projectPath);
-                    chooseAFeatures(newVisitDataCollector);
+                    Processor newProcessor = new Processor();
+                    newProcessor.makeAnalysis(projectPath);
+                    chooseAFeatures(newProcessor);
                     break;
                 case "1":
                     System.err.println("Génération du graphe d'appel ...");
                     Thread.sleep(500);
                     System.out.print("Nom du graphe d'appel : ");
                     graphName = sc.nextLine().trim();
-                    visitDataCollector.writeCallGraphInDotFile(graphName);
+                    processor.writeCallGraphInDotFile(graphName);
                     Thread.sleep(500);
                     System.out.println("Graphe d'appel généré !");
                     Thread.sleep(500);
@@ -84,7 +87,7 @@ public class Application {
                     classe1 = sc.nextLine().trim();
                     System.out.print("classe2 : ");
                     classe2 = sc.nextLine().trim();
-                    System.out.println(String.format("Couplage (%s, %s) = %f.", classe1, classe2, visitDataCollector.couplage(classe1, classe2)));
+                    System.out.println(String.format("Couplage (%s, %s) = %f.", classe1, classe2, processor.couplage(classe1, classe2)));
                     Thread.sleep(500);
                     break;
                 case "3":
@@ -92,7 +95,12 @@ public class Application {
                     Thread.sleep(500);
                     System.out.print("Nom du graphe de couplage pondéré : ");
                     graphName = sc.nextLine().trim();
-                    visitDataCollector.writeWeightedCouplingGraphInDotFile(graphName);
+                    processor.writeWeightedCouplingGraphInDotFile(graphName);
+                    Thread.sleep(500);
+                    break;
+                case "4":
+                    ICluster dendrogramme = processor.clusteringHierarchic();
+                    System.out.println(dendrogramme);
                     Thread.sleep(500);
                     break;
                 case "q":
@@ -116,10 +124,10 @@ public class Application {
         System.out.print("Veuillez indiquer le repertoire vers le projet à analyser : ");
         String projectPath = sc.nextLine().trim();
 
-        VisitDataCollector visitDataCollector = new VisitDataCollector();
-        visitDataCollector.makeAnalysis(projectPath);
+        Processor processor = new Processor();
+        processor.makeAnalysis(projectPath);
 
-        chooseAFeatures(visitDataCollector);
+        chooseAFeatures(processor);
     }
 
     public static void main(String[] args) throws IOException, InterruptedException, EmptyProjectException, NotFoundPathProjectException {
