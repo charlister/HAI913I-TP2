@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="correction de la génération des graphes et mise en place du dendrogramme sans paramètre.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/ICluster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" afterDir="false" />
-    </list>
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="renommage de la méthode de l'interface ICluster" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +96,7 @@
       <workItem from="1666934096263" duration="19547000" />
       <workItem from="1667033991243" duration="26048000" />
       <workItem from="1667287412649" duration="15026000" />
-      <workItem from="1667332592340" duration="1928000" />
+      <workItem from="1667332592340" duration="2233000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -125,7 +119,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667301628003</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="renommage de la méthode de l'interface ICluster">
+      <created>1667334645854</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1667334645854</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +147,7 @@
     <MESSAGE value="calcul du couplage entre 2 classes" />
     <MESSAGE value="génération du graphe de couplage" />
     <MESSAGE value="correction de la génération des graphes et mise en place du dendrogramme sans paramètre." />
-    <option name="LAST_COMMIT_MESSAGE" value="correction de la génération des graphes et mise en place du dendrogramme sans paramètre." />
+    <MESSAGE value="renommage de la méthode de l'interface ICluster" />
+    <option name="LAST_COMMIT_MESSAGE" value="renommage de la méthode de l'interface ICluster" />
   </component>
 </project>

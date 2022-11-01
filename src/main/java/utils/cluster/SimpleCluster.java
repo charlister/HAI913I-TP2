@@ -18,6 +18,13 @@ public class SimpleCluster implements ICluster {
     }
 
     @Override
+    public List<ICluster> getSubClusters() {
+        List<ICluster> result = new ArrayList<>();
+        result.add(this);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return cluster;
     }
