@@ -7,6 +7,7 @@ import utils.cluster.Cluster;
 import utils.cluster.ICluster;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 // afficher le graphe
@@ -34,6 +35,7 @@ public class Application {
         menu.append("2. Calculer le couplage entre deux classes.\n");
         menu.append("3. Générer un graphe de couplage pondéré.\n");
         menu.append("4. Générer un dendrogramme.\n");
+        menu.append("5. Identification de modules.\n");
         menu.append("q. Quitter l’application.\n");
     }
 
@@ -57,6 +59,7 @@ public class Application {
         String graphName;
         String classe1;
         String classe2;
+        ICluster dendrogramme = null;
         while (!choice.equals("q")) {
             displayMenu();
             Thread.sleep(500);
@@ -68,6 +71,7 @@ public class Application {
                     String projectPath = sc.nextLine();
                     Processor newProcessor = new Processor();
                     newProcessor.makeAnalysis(projectPath);
+                    dendrogramme = null;
                     chooseAFeatures(newProcessor);
                     break;
                 case "1":
@@ -99,9 +103,23 @@ public class Application {
                     Thread.sleep(500);
                     break;
                 case "4":
-                    ICluster dendrogramme = processor.clusteringHierarchic();
+                    dendrogramme = processor.clusteringHierarchic();
                     System.out.println(dendrogramme);
                     Thread.sleep(500);
+                    break;
+                case "5":
+                    if (dendrogramme == null) {
+                        System.err.println("Générer le dendrogramme à partir de l'option 4 avant d'employer l'option 5.");
+                        break;
+                    }
+                    System.err.print("Préciser la valeur de CP : ");
+                    float CP = sc.nextFloat();
+                    List<ICluster> modules = processor.identifyModules(dendrogramme, CP);
+
+                    for (ICluster groupe : modules) {
+                        System.out.println("??? "+groupe.toString());
+                    }
+                    Thread.sleep(1000);
                     break;
                 case "q":
                     break;

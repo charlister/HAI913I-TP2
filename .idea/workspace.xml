@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="renommage de la méthode de l'interface ICluster" />
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="obtention des sous-clusters depuis l'interface">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Application.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -96,7 +100,10 @@
       <workItem from="1666934096263" duration="19547000" />
       <workItem from="1667033991243" duration="26048000" />
       <workItem from="1667287412649" duration="15026000" />
-      <workItem from="1667332592340" duration="2233000" />
+      <workItem from="1667332592340" duration="8751000" />
+      <workItem from="1667415954465" duration="6490000" />
+      <workItem from="1667432291464" duration="347000" />
+      <workItem from="1667501665583" duration="4175000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -126,7 +133,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667334645854</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="obtention des sous-clusters depuis l'interface">
+      <created>1667335132914</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1667335132914</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,6 +162,7 @@
     <MESSAGE value="génération du graphe de couplage" />
     <MESSAGE value="correction de la génération des graphes et mise en place du dendrogramme sans paramètre." />
     <MESSAGE value="renommage de la méthode de l'interface ICluster" />
-    <option name="LAST_COMMIT_MESSAGE" value="renommage de la méthode de l'interface ICluster" />
+    <MESSAGE value="obtention des sous-clusters depuis l'interface" />
+    <option name="LAST_COMMIT_MESSAGE" value="obtention des sous-clusters depuis l'interface" />
   </component>
 </project>

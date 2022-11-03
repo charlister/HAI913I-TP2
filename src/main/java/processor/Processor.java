@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
+import static java.lang.String.format;
+
 public class Processor {
     private List<FileData> fileDataList;
     private Graph graph;
@@ -77,7 +79,7 @@ public class Processor {
                         b = true;
                     }
                     if (b) {
-                        System.out.println("\""+caller+"\"->\""+callee+"\"\n");
+//                        System.out.println("\""+caller+"\"->\""+callee+"\"\n");
                         this.linksCallGraph.add("\""+caller+"\"->\""+callee+"\"\n");
                         this.graph.addNode(calleeClass);
                         this.graph.addEdge(fileData.getTypeDeclarationName(), calleeClass);
@@ -116,19 +118,26 @@ public class Processor {
 
     public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
         float result = 0;
+        float divisor = 0;
 
         List<String> monoClusters1 = cluster1.getClusterClasses();
         List<String> monoClusters2 = cluster2.getClusterClasses();
+        List<String> monoClusters = new ArrayList<>();
+        monoClusters.addAll(monoClusters1);
+        monoClusters.addAll(monoClusters2);
 
-        for (String classMonoClusters1 :
-                monoClusters1) {
-            for (String classMonoClusters2 :
-                    monoClusters2) {
-                result += couplage(classMonoClusters1, classMonoClusters2);
+        for (String classMonoClusters1 : monoClusters) {
+            for (String classMonoClusters2 : monoClusters) {
+                if (!classMonoClusters1.equals(classMonoClusters2)) {
+                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
+                    result += tmp;
+                    divisor++;
+                }
             }
         }
 
-        result /= (monoClusters1.size()*monoClusters2.size());
+        result /= divisor;
+        System.err.println(format("(%s ;; %s) = %f", cluster1, cluster2, result));
 
         return result;
     }
@@ -177,6 +186,22 @@ public class Processor {
         return mainCluster.getSubClusters().get(0);
     }
 
+//    Inclure le paramètre M d'une certaine manière pour limiter le nombre de modules.
+    public List<ICluster> identifyModules(ICluster cluster, float CP) {
+        List<ICluster> modules = new ArrayList<>();
+
+        if (cluster.getSubClusters().size() > 1) {
+            if (calculateCouplingBetweenClusters (cluster.getSubClusters().get(0), cluster.getSubClusters().get(1)) > CP) {
+                modules.add(cluster);
+                System.out.println("Module ajouté : " + cluster);
+            }
+            for (ICluster subCluster : cluster.getSubClusters()) {
+                modules.addAll(identifyModules(subCluster, CP));
+            }
+        }
+        return modules;
+    }
+
     // Draw/Display graph
 
     public void writeCallGraphInDotFile(String fileGraphPath) throws IOException {
@@ -195,7 +220,7 @@ public class Processor {
         fW.write("digraph CouplingGraph {\n");
         fW.write("edge[dir=none]\n");
         for (Graph.Edge edge : graph.getEdges()) {
-            fW.write(edge.getNode1()+"->"+edge.getNode2()+String.format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
+            fW.write(edge.getNode1()+"->"+edge.getNode2()+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
         fW.write("}");
         fW.close();
