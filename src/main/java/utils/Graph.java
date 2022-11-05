@@ -2,53 +2,10 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 public class Graph {
-    public class ComplexNode {
-        private String packageName;
-        private String className;
-
-        public ComplexNode(String packageName, String className) {
-            this.packageName = packageName;
-            this.className = className;
-        }
-
-        public ComplexNode(String className) {
-            this.packageName = "?";
-            this.className = className;
-        }
-
-        public String getPackageName() {
-            return packageName;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            ComplexNode complexNode = (ComplexNode) o;
-            return Objects.equals(packageName, complexNode.packageName) && Objects.equals(className, complexNode.className);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(packageName, className);
-        }
-
-        @Override
-        public String toString() {
-            return packageName + '.' + className;
-        }
-    }
     public class Edge {
-        ComplexNode complexNode1;
-        ComplexNode complexNode2;
         String node1;
         String node2;
         int weight;
@@ -56,12 +13,6 @@ public class Graph {
         public Edge(String node1, String node2) {
             this.node1 = node1;
             this.node2 = node2;
-            this.weight = 1;
-        }
-
-        public Edge(ComplexNode complexNode1, ComplexNode complexNode2) {
-            this.complexNode1 = complexNode1;
-            this.complexNode2 = complexNode2;
             this.weight = 1;
         }
 
@@ -75,14 +26,6 @@ public class Graph {
 
         public String getNode2() {
             return node2;
-        }
-
-        public void setComplexNode1(ComplexNode complexNode1) {
-            this.complexNode1 = complexNode1;
-        }
-
-        public void setComplexNode2(ComplexNode complexNode2) {
-            this.complexNode2 = complexNode2;
         }
 
         public void incrWeight() {

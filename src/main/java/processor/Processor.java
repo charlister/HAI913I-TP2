@@ -20,6 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -27,7 +28,7 @@ public class Processor {
     private List<FileData> fileDataList;
     private Graph graph;
     private Set<String> linksCallGraph;
-    private Map<TypeDeclaration, Map<MethodDeclaration, List<MethodInvocation>>> mapTheCallGraph;
+    List<String> classNames;
 
 
     /**
@@ -36,8 +37,8 @@ public class Processor {
     public Processor() {
         this.graph = new Graph();
         this.linksCallGraph = new HashSet<>();
-        this.mapTheCallGraph = new HashMap<>();
         this.fileDataList = new ArrayList<>();
+        this.classNames = new ArrayList<>();
     }
 
     /* EXERCICE 1 */
@@ -50,7 +51,7 @@ public class Processor {
             MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
             fileData.getTypeDeclaration().accept(visitorMethod);
 
-            callerClass = fileData.getTypeDeclarationName();
+            callerClass = fileData.getFullClassName();
             this.graph.addNode(callerClass);
 
             for (MethodDeclaration nodeMethod : visitorMethod.getMethodDeclarationList()) {
@@ -63,15 +64,21 @@ public class Processor {
                     boolean b = false;
                     if (methodInvocation.getExpression() != null) {
                         if (methodInvocation.getExpression().resolveTypeBinding() != null) {
-                            calleeClass = methodInvocation.getExpression().resolveTypeBinding().getName();
-                            callee = calleeClass+"::"+methodInvocation.getName();
-                            b = true;
+                            if(classNames.contains(methodInvocation.getExpression().resolveTypeBinding().getName())) {
+                                calleeClass = methodInvocation.getExpression().resolveTypeBinding().getPackage().getName()+"."+methodInvocation.getExpression().resolveTypeBinding().getName();
+                                callee = calleeClass+"::"+methodInvocation.getName();
+                                b = true;
+                            }
+
                         }
                     }
                     else if (methodInvocation.resolveMethodBinding() != null) {
-                        calleeClass = methodInvocation.resolveMethodBinding().getDeclaringClass().getName();
-                        callee = calleeClass+"::"+methodInvocation.getName();
-                        b = true;
+                        if (classNames.contains(methodInvocation.resolveMethodBinding().getDeclaringClass().getName())) {
+                            calleeClass = methodInvocation.resolveMethodBinding().getDeclaringClass().getPackage().getName()+"."+methodInvocation.resolveMethodBinding().getDeclaringClass().getName();
+                            callee = calleeClass+"::"+methodInvocation.getName();
+                            b = true;
+                        }
+
                     }
                     else {
                         calleeClass = callerClass;
@@ -79,10 +86,9 @@ public class Processor {
                         b = true;
                     }
                     if (b) {
-//                        System.out.println("\""+caller+"\"->\""+callee+"\"\n");
                         this.linksCallGraph.add("\""+caller+"\"->\""+callee+"\"\n");
                         this.graph.addNode(calleeClass);
-                        this.graph.addEdge(fileData.getTypeDeclarationName(), calleeClass);
+                        this.graph.addEdge(callerClass, calleeClass);
                     }
                 }
             }
@@ -137,7 +143,7 @@ public class Processor {
         }
 
         result /= divisor;
-        System.err.println(format("(%s ;; %s) = %f", cluster1, cluster2, result));
+//        System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
 
         return result;
     }
@@ -186,19 +192,38 @@ public class Processor {
         return mainCluster.getSubClusters().get(0);
     }
 
-//    Inclure le paramètre M d'une certaine manière pour limiter le nombre de modules.
-    public List<ICluster> identifyModules(ICluster cluster, float CP) {
-        List<ICluster> modules = new ArrayList<>();
+//    Inclure le paramètre M (voir classNames.size()) d'une certaine manière pour limiter le nombre de modules.
+    public Map<ICluster, Float> identifyModulesBis(ICluster cluster, float CP) {
+        Map<ICluster, Float> mapModuleCoupling = new HashMap<>();
 
         if (cluster.getSubClusters().size() > 1) {
-            if (calculateCouplingBetweenClusters (cluster.getSubClusters().get(0), cluster.getSubClusters().get(1)) > CP) {
-                modules.add(cluster);
-                System.out.println("Module ajouté : " + cluster);
+            float coupling = calculateCouplingBetweenClusters (cluster.getSubClusters().get(0), cluster.getSubClusters().get(1));
+            if (coupling > CP) {
+                mapModuleCoupling.put(cluster, coupling);
+                System.out.println("Module ajouté : " + cluster + " : " + coupling);
             }
             for (ICluster subCluster : cluster.getSubClusters()) {
-                modules.addAll(identifyModules(subCluster, CP));
+                mapModuleCoupling.putAll(identifyModulesBis(subCluster, CP));
             }
         }
+
+        return mapModuleCoupling;
+    }
+
+    public Set<ICluster> identifyModules(ICluster cluster, float CP) {
+        Set<ICluster> modules;
+        Map<ICluster, Float> mapModuleCoupling = identifyModulesBis(cluster, CP);
+
+        // sélectionner les meilleurs modules avec une limite de M/2
+        int M = classNames.size();
+        modules = mapModuleCoupling
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) // delete Comparator.reverseOrder() from parenthesis -> asc on map values
+                .limit(M/2)
+                .collect(Collectors.toMap(x -> x.getKey(), x -> x.getValue()))
+                .keySet();
+
         return modules;
     }
 
@@ -220,7 +245,7 @@ public class Processor {
         fW.write("digraph CouplingGraph {\n");
         fW.write("edge[dir=none]\n");
         for (Graph.Edge edge : graph.getEdges()) {
-            fW.write(edge.getNode1()+"->"+edge.getNode2()+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
+            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
         fW.write("}");
         fW.close();
@@ -246,7 +271,11 @@ public class Processor {
 
 //    COLLECT DATA PROJECT
 
-
+    private void extractClassNames() {
+        for (FileData fileData : fileDataList) {
+            this.classNames.add(fileData.getTypeDeclarationName());
+        }
+    }
 
     /**
      * collecter l'ensemble des données souhaitées pour le TP.
@@ -267,6 +296,7 @@ public class Processor {
 
             fileDataList.add(new FileData(cu));
         }
+        extractClassNames();
         collectGraphData();
     }
 }

@@ -9,6 +9,9 @@ import utils.cluster.ICluster;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
+
+import static java.lang.String.format;
 
 // afficher le graphe
 // calculer le couplage
@@ -91,7 +94,7 @@ public class Application {
                     classe1 = sc.nextLine().trim();
                     System.out.print("classe2 : ");
                     classe2 = sc.nextLine().trim();
-                    System.out.println(String.format("Couplage (%s, %s) = %f.", classe1, classe2, processor.couplage(classe1, classe2)));
+                    System.out.println(format("Couplage (%s, %s) = %f.", classe1, classe2, processor.couplage(classe1, classe2)));
                     Thread.sleep(500);
                     break;
                 case "3":
@@ -114,10 +117,12 @@ public class Application {
                     }
                     System.err.print("Préciser la valeur de CP : ");
                     float CP = sc.nextFloat();
-                    List<ICluster> modules = processor.identifyModules(dendrogramme, CP);
 
+                    Set<ICluster> modules = processor.identifyModules(dendrogramme, CP);
+                    String pluriel = modules.size()>1?"s":"";
+                    System.err.println(format("Module%s sélectionné%s : ", pluriel, pluriel));
                     for (ICluster groupe : modules) {
-                        System.out.println("??? "+groupe.toString());
+                        System.out.println("- "+groupe.toString());
                     }
                     Thread.sleep(1000);
                     break;

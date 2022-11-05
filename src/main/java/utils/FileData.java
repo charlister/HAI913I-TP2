@@ -35,14 +35,6 @@ public class FileData {
         System.out.println(this);
     }
 
-    public PackageDeclaration getPackageDeclaration() {
-        return packageDeclaration;
-    }
-
-    public List<ImportDeclaration> getImportDeclarations() {
-        return importDeclarations;
-    }
-
     public TypeDeclaration getTypeDeclaration() {
         return typeDeclaration;
     }
@@ -63,26 +55,8 @@ public class FileData {
         return typeDeclaration.getName().toString();
     }
 
-    public String getClassPackage(String className) {
-        String result = "?";
-        switch (visitorClass.isClassNameAppearingInTypeDeclarations(className)) {
-            case -1:
-                result = visitorImport.findPackageClassFromImportDeclarations(className);
-                break;
-            case 0:
-                result = getPackageDeclarationName()+"."+getTypeDeclarationName();
-                break;
-            case 1:
-                result = getPackageDeclarationName();
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-
-    public String getFullClassName(String className) {
-        return getClassPackage(className) + "." + className;
+    public String getFullClassName() {
+        return getPackageDeclarationName() + "." + getTypeDeclarationName();
     }
 
     @Override
