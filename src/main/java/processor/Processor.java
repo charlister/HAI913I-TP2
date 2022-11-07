@@ -107,20 +107,6 @@ public class Processor {
     }
 
     /* EXERCICE 2 */
-/*
-
-    private float[][] generateCouplingClassesMatrix(List<String> classes) {
-        // gérer l'exception si la matrix est vide (n = 0, c'est-à-dire aucune classe dans l'appli.)
-        int n = classes.size();
-        float[][] couplingClassesMatrix = new float[n][n];
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                couplingClassesMatrix[i][j] = this.couplage(classes.get(i), classes.get(j));
-            }
-        }
-        return couplingClassesMatrix;
-    }
-*/
 
     public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
         float result = 0;
@@ -131,19 +117,30 @@ public class Processor {
         List<String> monoClusters = new ArrayList<>();
         monoClusters.addAll(monoClusters1);
         monoClusters.addAll(monoClusters2);
+        int n = monoClusters.size();
 
-        for (String classMonoClusters1 : monoClusters) {
-            for (String classMonoClusters2 : monoClusters) {
-                if (!classMonoClusters1.equals(classMonoClusters2)) {
-                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
-                    result += tmp;
-                    divisor++;
-                }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i==j)
+                    break;
+                float tmp = couplage(monoClusters.get(i), monoClusters.get(j));
+                result += tmp;
+                divisor++;
             }
         }
 
+//        for (String classMonoClusters1 : monoClusters) {
+//            for (String classMonoClusters2 : monoClusters) {
+//                if (!classMonoClusters1.equals(classMonoClusters2)) {
+//                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
+//                    result += tmp;
+//                    divisor++;
+//                }
+//            }
+//        }
+
         result /= divisor;
-//        System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
+        System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
 
         return result;
     }
@@ -294,7 +291,9 @@ public class Processor {
             String content = FileUtils.readFileToString(javaFile);
             CompilationUnit cu = parser.parseSource(content.toCharArray());
 
-            fileDataList.add(new FileData(cu));
+            FileData fileData = new FileData(cu);
+            System.out.println(fileData);
+            fileDataList.add(fileData);
         }
         extractClassNames();
         collectGraphData();
