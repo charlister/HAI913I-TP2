@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="identification des modules avec limite (M/2)">
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="optimisation du calcul du couplage entre deux clusters.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/FileData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/FileData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,7 +106,7 @@
       <workItem from="1667539885046" duration="13886000" />
       <workItem from="1667732120755" duration="7212000" />
       <workItem from="1667747832056" duration="6588000" />
-      <workItem from="1667824985705" duration="11737000" />
+      <workItem from="1667824985705" duration="18833000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -158,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667667295316</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="optimisation du calcul du couplage entre deux clusters.">
+      <created>1667847037650</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1667847037650</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,6 +189,7 @@
     <MESSAGE value="obtention des sous-clusters depuis l'interface" />
     <MESSAGE value="identification des modules sans limite (M/2)" />
     <MESSAGE value="identification des modules avec limite (M/2)" />
-    <option name="LAST_COMMIT_MESSAGE" value="identification des modules avec limite (M/2)" />
+    <MESSAGE value="optimisation du calcul du couplage entre deux clusters." />
+    <option name="LAST_COMMIT_MESSAGE" value="optimisation du calcul du couplage entre deux clusters." />
   </component>
 </project>

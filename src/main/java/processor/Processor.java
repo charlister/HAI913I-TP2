@@ -108,36 +108,58 @@ public class Processor {
 
     /* EXERCICE 2 */
 
+//    public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
+//        float result = 0;
+//        float divisor = 0;
+//
+//        List<String> monoClusters1 = cluster1.getClusterClasses();
+//        List<String> monoClusters2 = cluster2.getClusterClasses();
+//        List<String> monoClusters = new ArrayList<>();
+//        monoClusters.addAll(monoClusters1);
+//        monoClusters.addAll(monoClusters2);
+//        int n = monoClusters.size();
+//
+//        for (int i = 0; i < n; i++) {
+//            for (int j = 0; j < n; j++) {
+//                if (i==j)
+//                    break;
+//                float tmp = couplage(monoClusters.get(i), monoClusters.get(j));
+//                result += tmp;
+//                divisor++;
+//            }
+//        }
+//
+////        for (String classMonoClusters1 : monoClusters) {
+////            for (String classMonoClusters2 : monoClusters) {
+////                if (!classMonoClusters1.equals(classMonoClusters2)) {
+////                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
+////                    result += tmp;
+////                    divisor++;
+////                }
+////            }
+////        }
+//
+//        result /= divisor;
+//        System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
+//
+//        return result;
+//    }
     public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
         float result = 0;
         float divisor = 0;
 
         List<String> monoClusters1 = cluster1.getClusterClasses();
         List<String> monoClusters2 = cluster2.getClusterClasses();
-        List<String> monoClusters = new ArrayList<>();
-        monoClusters.addAll(monoClusters1);
-        monoClusters.addAll(monoClusters2);
-        int n = monoClusters.size();
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i==j)
-                    break;
-                float tmp = couplage(monoClusters.get(i), monoClusters.get(j));
-                result += tmp;
-                divisor++;
+        for (String classMonoClusters1 : monoClusters1) {
+            for (String classMonoClusters2 : monoClusters2) {
+                if (!classMonoClusters1.equals(classMonoClusters2)) {
+                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
+                    result += tmp;
+                    divisor++;
+                }
             }
         }
-
-//        for (String classMonoClusters1 : monoClusters) {
-//            for (String classMonoClusters2 : monoClusters) {
-//                if (!classMonoClusters1.equals(classMonoClusters2)) {
-//                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
-//                    result += tmp;
-//                    divisor++;
-//                }
-//            }
-//        }
 
         result /= divisor;
         System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
