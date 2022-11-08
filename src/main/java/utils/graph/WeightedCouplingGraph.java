@@ -2,30 +2,7 @@ package utils.graph;
 
 import java.util.Optional;
 
-public class WeightedCouplingGraph extends AbstractGraph<Node, WeightedCouplingGraph.WeightedEdge> {
-
-    public class WeightedEdge extends Edge{
-        private int weight;
-
-        public WeightedEdge(Node node1, Node node2) {
-            super(node1, node2);
-            this.weight = 1;
-        }
-
-        public int getWeight() {
-            return weight;
-        }
-
-        public void incrWeight() {
-            this.weight++;
-        }
-
-        @Override
-        public String toString() {
-            return "("+node1+")----"+weight+"----("+node2+")";
-        }
-    }
-
+public class WeightedCouplingGraph extends AbstractGraph<Node, WeightedEdge> {
     public WeightedCouplingGraph() {
         super();
     }

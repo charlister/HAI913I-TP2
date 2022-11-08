@@ -3,40 +3,13 @@ package utils.graph;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CallGraph extends AbstractGraph<CallGraph.NodeCallGraph, Edge> {
-    public static class NodeCallGraph extends Node {
-        private String methodName;
-
-        public NodeCallGraph(String packageName, String className, String methodName) {
-            super(packageName, className);
-            this.methodName = methodName;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            if (!super.equals(o)) return false;
-            NodeCallGraph that = (NodeCallGraph) o;
-            return methodName.equals(that.methodName);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(super.hashCode(), methodName);
-        }
-
-        @Override
-        public String toString() {
-            return super.toString()+"::"+methodName;
-        }
-    }
+public class CallGraph extends AbstractGraph<CallGraphNode, Edge> {
     public CallGraph() {
         super();
     }
 
     @Override
-    public void addEdge(NodeCallGraph node1, NodeCallGraph node2) {
+    public void addEdge(CallGraphNode node1, CallGraphNode node2) {
         Edge edge = this.findEdge(node1, node2);
         if (edge == null) {
             this.edges.add(new Edge(node1, node2));
@@ -44,7 +17,7 @@ public class CallGraph extends AbstractGraph<CallGraph.NodeCallGraph, Edge> {
     }
 
     @Override
-    public Edge findEdge(NodeCallGraph node1, NodeCallGraph node2) {
+    public Edge findEdge(CallGraphNode node1, CallGraphNode node2) {
         Optional<Edge> result = edges.stream()
                 .filter(e -> e.node1.equals(node1) && e.node2.equals(node2))
                 .findFirst();

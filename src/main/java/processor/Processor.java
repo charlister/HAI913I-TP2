@@ -66,7 +66,7 @@ public class Processor {
                 nodeMethod.accept(visitorMethodInvocation);
 
                 callerMethod = nodeMethod.getName().toString();
-                this.callGraph.addNode(new CallGraph.NodeCallGraph(callerPackage, callerClass, callerMethod));
+                this.callGraph.addNode(new CallGraphNode(callerPackage, callerClass, callerMethod));
 
                 for (MethodInvocation methodInvocation : visitorMethodInvocation.getMethodInvocations()) {
                     boolean b = false;
@@ -97,8 +97,8 @@ public class Processor {
                     if (b) {
                         this.couplingGraph.addNode(new Node(calleePackage, calleeClass));
                         this.couplingGraph.addEdge(new Node(callerPackage, callerClass), new Node(calleePackage, calleeClass));
-                        this.callGraph.addNode(new CallGraph.NodeCallGraph(calleePackage, calleeClass, calleeMethod));
-                        this.callGraph.addEdge(new CallGraph.NodeCallGraph(callerPackage, callerClass, callerMethod), new CallGraph.NodeCallGraph(calleePackage, calleeClass, calleeMethod));
+                        this.callGraph.addNode(new CallGraphNode(calleePackage, calleeClass, calleeMethod));
+                        this.callGraph.addEdge(new CallGraphNode(callerPackage, callerClass, callerMethod), new CallGraphNode(calleePackage, calleeClass, calleeMethod));
                     }
                 }
             }
@@ -106,10 +106,10 @@ public class Processor {
     }
 
     public float couplage(String classe1, String classe2) {
-        WeightedCouplingGraph.WeightedEdge edge = couplingGraph.findEdge(classe1, classe2);
+        WeightedEdge edge = couplingGraph.findEdge(classe1, classe2);
         float a = edge == null ? 0 : edge.getWeight();
         float b = 0;
-        for (WeightedCouplingGraph.WeightedEdge e :
+        for (WeightedEdge e :
                 couplingGraph.getEdges()) {
             b += e.getWeight();
         }
@@ -275,7 +275,7 @@ public class Processor {
         FileWriter fW = new FileWriter(fileGraphPath);
         fW.write("digraph WeightedCouplingGraph {\n");
         fW.write("edge[dir=none]\n");
-        for (WeightedCouplingGraph.WeightedEdge edge : couplingGraph.getEdges()) {
+        for (WeightedEdge edge : couplingGraph.getEdges()) {
             fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
         fW.write("}");
@@ -287,7 +287,7 @@ public class Processor {
         FileWriter fW = new FileWriter(fileGraphPath);
         fW.write("digraph WeightedCouplingGraph {\n");
         fW.write("edge[dir=none]\n");
-        for (WeightedCouplingGraph.WeightedEdge edge : weightedCouplingGraph.getEdges()) {
+        for (WeightedEdge edge : weightedCouplingGraph.getEdges()) {
             fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
         fW.write("}");
