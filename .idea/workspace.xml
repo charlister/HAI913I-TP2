@@ -4,15 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="edition de la méthoded calculateCouplingBetweenClusters">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/AbstractGraph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/Edge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightEdge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" afterDir="false" />
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="Gestion des graphes à partir de deux sous-graphes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/Node.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Application.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Graph.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/AbstractGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/AbstractGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/Edge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/WeightEdge.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +116,7 @@
       <workItem from="1667747832056" duration="6588000" />
       <workItem from="1667824985705" duration="19151000" />
       <workItem from="1667891378211" duration="4905000" />
-      <workItem from="1667915139420" duration="4196000" />
+      <workItem from="1667915139420" duration="14584000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -180,7 +181,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667861967320</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Gestion des graphes à partir de deux sous-graphes">
+      <created>1667919548159</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1667919548159</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +215,7 @@
     <MESSAGE value="identification des modules avec limite (M/2)" />
     <MESSAGE value="optimisation du calcul du couplage entre deux clusters." />
     <MESSAGE value="edition de la méthoded calculateCouplingBetweenClusters" />
-    <option name="LAST_COMMIT_MESSAGE" value="edition de la méthoded calculateCouplingBetweenClusters" />
+    <MESSAGE value="Gestion des graphes à partir de deux sous-graphes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Gestion des graphes à partir de deux sous-graphes" />
   </component>
 </project>

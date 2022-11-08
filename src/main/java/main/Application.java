@@ -5,6 +5,7 @@ import exceptions.NotFoundPathProjectException;
 import processor.Processor;
 import utils.cluster.Cluster;
 import utils.cluster.ICluster;
+import utils.graph.WeightedCouplingGraph;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,6 +40,7 @@ public class Application {
         menu.append("3. Générer un graphe de couplage pondéré.\n");
         menu.append("4. Générer un dendrogramme.\n");
         menu.append("5. Identification de modules.\n");
+        menu.append("6. Convertir le graph d'appel en graphe de couplage.\n");
         menu.append("q. Quitter l’application.\n");
     }
 
@@ -125,6 +127,15 @@ public class Application {
                         System.out.println("- "+groupe.toString());
                     }
                     Thread.sleep(1000);
+                    break;
+                case "6":
+                    WeightedCouplingGraph conversion = processor.getCallGraph().convertCallGraphToWeightedCouplingGraph();
+                    System.err.println("Conversion du graph d'appel en un graphe de couplage pondéré ...");
+                    Thread.sleep(500);
+                    System.out.print("Nom du graphe de couplage pondéré : ");
+                    graphName = sc.nextLine().trim();
+                    processor.writeWeightedCouplingGraphInDotFile(graphName, conversion);
+                    Thread.sleep(500);
                     break;
                 case "q":
                     break;

@@ -26,9 +26,9 @@ import static java.lang.String.format;
 
 public class Processor {
     private List<FileData> fileDataList;
-    private AbstractGraph couplingGraph;
-    private AbstractGraph callGraph;
-    List<String> classNames;
+    private WeightedCouplingGraph couplingGraph;
+    private CallGraph callGraph;
+    private List<String> classNames;
 
 
     /**
@@ -41,56 +41,64 @@ public class Processor {
         this.classNames = new ArrayList<>();
     }
 
+    public CallGraph getCallGraph() {
+        return callGraph;
+    }
+
     /* EXERCICE 1 */
 
 //    BUILD GRAPH
 
     private void collectGraphData() {
-        String calleeClass = "", callerClass = "", caller = "", callee = "";
+        String callerPackage = "", callerClass = "", callerMethod = "";
+        String calleePackage = "", calleeClass = "", calleeMethod = "";
+
         for (FileData fileData : this.fileDataList) {
             MethodDeclarationVisitor visitorMethod = new MethodDeclarationVisitor();
             fileData.getTypeDeclaration().accept(visitorMethod);
 
-            callerClass = fileData.getFullClassName();
-            this.couplingGraph.addNode(callerClass);
+            callerPackage = fileData.getPackageDeclarationName();
+            callerClass = fileData.getTypeDeclarationName();
+            this.couplingGraph.addNode(new Node(callerPackage, callerClass));
 
             for (MethodDeclaration nodeMethod : visitorMethod.getMethodDeclarationList()) {
                 MethodInvocationVisitor visitorMethodInvocation = new MethodInvocationVisitor();
                 nodeMethod.accept(visitorMethodInvocation);
 
-                caller = callerClass+"::"+nodeMethod.getName();
-                this.callGraph.addNode(caller);
+                callerMethod = nodeMethod.getName().toString();
+                this.callGraph.addNode(new CallGraph.NodeCallGraph(callerPackage, callerClass, callerMethod));
 
                 for (MethodInvocation methodInvocation : visitorMethodInvocation.getMethodInvocations()) {
                     boolean b = false;
                     if (methodInvocation.getExpression() != null) {
                         if (methodInvocation.getExpression().resolveTypeBinding() != null) {
                             if(classNames.contains(methodInvocation.getExpression().resolveTypeBinding().getName())) {
-                                calleeClass = methodInvocation.getExpression().resolveTypeBinding().getPackage().getName()+"."+methodInvocation.getExpression().resolveTypeBinding().getName();
-                                callee = calleeClass+"::"+methodInvocation.getName();
+                                calleePackage = methodInvocation.getExpression().resolveTypeBinding().getPackage().getName();
+                                calleeClass = methodInvocation.getExpression().resolveTypeBinding().getName();
+                                calleeMethod = methodInvocation.getName().toString();
                                 b = true;
                             }
-
                         }
                     }
                     else if (methodInvocation.resolveMethodBinding() != null) {
                         if (classNames.contains(methodInvocation.resolveMethodBinding().getDeclaringClass().getName())) {
-                            calleeClass = methodInvocation.resolveMethodBinding().getDeclaringClass().getPackage().getName()+"."+methodInvocation.resolveMethodBinding().getDeclaringClass().getName();
-                            callee = calleeClass+"::"+methodInvocation.getName();
+                            calleePackage = methodInvocation.resolveMethodBinding().getDeclaringClass().getPackage().getName();
+                            calleeClass = methodInvocation.resolveMethodBinding().getDeclaringClass().getName();
+                            calleeMethod = methodInvocation.getName().toString();
                             b = true;
                         }
-
                     }
                     else {
+                        calleePackage = callerPackage;
                         calleeClass = callerClass;
-                        callee = calleeClass+"::"+methodInvocation.getName();
+                        calleeMethod = methodInvocation.getName().toString();
                         b = true;
                     }
                     if (b) {
-                        this.couplingGraph.addNode(calleeClass);
-                        this.couplingGraph.addEdge(callerClass, calleeClass);
-                        this.callGraph.addNode(callee);
-                        this.callGraph.addEdge(caller, callee);
+                        this.couplingGraph.addNode(new Node(calleePackage, calleeClass));
+                        this.couplingGraph.addEdge(new Node(callerPackage, callerClass), new Node(calleePackage, calleeClass));
+                        this.callGraph.addNode(new CallGraph.NodeCallGraph(calleePackage, calleeClass, calleeMethod));
+                        this.callGraph.addEdge(new CallGraph.NodeCallGraph(callerPackage, callerClass, callerMethod), new CallGraph.NodeCallGraph(calleePackage, calleeClass, calleeMethod));
                     }
                 }
             }
@@ -98,12 +106,12 @@ public class Processor {
     }
 
     public float couplage(String classe1, String classe2) {
-        Edge edge = couplingGraph.findEdge(classe1, classe2);
-        float a = edge == null ? 0 : ((WeightEdge) edge).getWeight();
+        WeightedCouplingGraph.WeightedEdge edge = couplingGraph.findEdge(classe1, classe2);
+        float a = edge == null ? 0 : edge.getWeight();
         float b = 0;
-        for (Edge e :
+        for (WeightedCouplingGraph.WeightedEdge e :
                 couplingGraph.getEdges()) {
-            b += ((WeightEdge) e).getWeight();
+            b += e.getWeight();
         }
         return a/b;
     }
@@ -191,7 +199,10 @@ public class Processor {
     public ICluster clusteringHierarchic() {
         int[] newBestClusterIndex;
         Cluster mainCluster = new Cluster();
-        List<String> classes = couplingGraph.getNodes();
+        List<String> classes = couplingGraph.getNodes()
+                .stream()
+                .map(node -> node.toString())
+                .collect(Collectors.toList());
         for (String className : classes) {
             SimpleCluster simpleCluster = new SimpleCluster(className);
             mainCluster.addCluster(simpleCluster);
@@ -213,7 +224,6 @@ public class Processor {
         return mainCluster.getSubClusters().get(0);
     }
 
-//    Inclure le paramètre M (voir classNames.size()) d'une certaine manière pour limiter le nombre de modules.
     public Map<ICluster, Float> identifyModulesBis(ICluster cluster, float CP) {
         Map<ICluster, Float> mapModuleCoupling = new HashMap<>();
 
@@ -265,8 +275,20 @@ public class Processor {
         FileWriter fW = new FileWriter(fileGraphPath);
         fW.write("digraph WeightedCouplingGraph {\n");
         fW.write("edge[dir=none]\n");
-        for (Edge edge : couplingGraph.getEdges()) {
-            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", ((WeightEdge) edge).getWeight())+"\n");
+        for (WeightedCouplingGraph.WeightedEdge edge : couplingGraph.getEdges()) {
+            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
+        }
+        fW.write("}");
+        fW.close();
+        convertDotToSVG(fileGraphPath);
+    }
+
+    public void writeWeightedCouplingGraphInDotFile(String fileGraphPath, WeightedCouplingGraph weightedCouplingGraph) throws IOException {
+        FileWriter fW = new FileWriter(fileGraphPath);
+        fW.write("digraph WeightedCouplingGraph {\n");
+        fW.write("edge[dir=none]\n");
+        for (WeightedCouplingGraph.WeightedEdge edge : weightedCouplingGraph.getEdges()) {
+            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
         }
         fW.write("}");
         fW.close();

@@ -4,42 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractGraph {
-    protected List<String> nodes;
-    protected List<Edge> edges;
+public abstract class AbstractGraph<N extends Node, E extends Edge> {
+//    protected List<String> nodes;
+    protected List<N> nodes;
+    protected List<E> edges;
 
     public AbstractGraph() {
         this.nodes = new ArrayList<>();
         this.edges = new ArrayList<>();
     }
 
-    public List<String> getNodes() {
+    public List<N> getNodes() {
         return nodes;
     }
 
-    public List<Edge> getEdges() {
+    public List<E> getEdges() {
         return edges;
     }
 
-    public void addNode(String node) {
-        Optional<String> result = nodes.stream().filter(e -> e.equals(node)).findFirst();
+    public void addNode(N node) {
+        Optional<N> result = nodes.stream().filter(e -> e.equals(node)).findFirst();
         if (!result.isPresent()) {
             this.nodes.add(node);
         }
     }
 
-    public abstract void addEdge(String node1, String node2) ;
+    public abstract void addEdge(N node1, N node2) ;
 
-    public abstract Edge findEdge (String node1, String node2);
+    public abstract E findEdge (N node1, N node2);
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("nodes : \n");
-        for (String node : nodes) {
+        for (N node : nodes) {
             stringBuilder.append("\t- " + node + "\n");
         }
-        for (Edge edge : edges) {
+        for (E edge : edges) {
             stringBuilder.append(edge.toString()+"\n");
         }
         return stringBuilder.toString();
