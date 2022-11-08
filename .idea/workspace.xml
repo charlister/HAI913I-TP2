@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="optimisation du calcul du couplage entre deux clusters.">
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="edition de la méthoded calculateCouplingBetweenClusters">
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/AbstractGraph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/Edge.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightEdge.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/Graph.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,25 +39,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/senio/IdeaProjects/ERL/Test/spoon_toStringGenerator_example/hai913i&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.4816092&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/senio/IdeaProjects/ERL/A_Rendre/TP2/src/main/java/utils",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.4816092"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\senio\IdeaProjects\ERL\A_Rendre\TP2\src\main\java\utils" />
       <recent name="C:\Users\senio\IdeaProjects\ERL\A_Rendre\TP2\src\main\java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -106,7 +113,9 @@
       <workItem from="1667539885046" duration="13886000" />
       <workItem from="1667732120755" duration="7212000" />
       <workItem from="1667747832056" duration="6588000" />
-      <workItem from="1667824985705" duration="18833000" />
+      <workItem from="1667824985705" duration="19151000" />
+      <workItem from="1667891378211" duration="4905000" />
+      <workItem from="1667915139420" duration="4196000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -164,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667847037650</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="edition de la méthoded calculateCouplingBetweenClusters">
+      <created>1667861967320</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1667861967320</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -190,6 +206,7 @@
     <MESSAGE value="identification des modules sans limite (M/2)" />
     <MESSAGE value="identification des modules avec limite (M/2)" />
     <MESSAGE value="optimisation du calcul du couplage entre deux clusters." />
-    <option name="LAST_COMMIT_MESSAGE" value="optimisation du calcul du couplage entre deux clusters." />
+    <MESSAGE value="edition de la méthoded calculateCouplingBetweenClusters" />
+    <option name="LAST_COMMIT_MESSAGE" value="edition de la méthoded calculateCouplingBetweenClusters" />
   </component>
 </project>

@@ -1,7 +1,6 @@
 package processor;
 
 import utils.cluster.*;
-import utils.Graph;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.engine.Renderer;
@@ -13,6 +12,7 @@ import exceptions.EmptyProjectException;
 import exceptions.NotFoundPathProjectException;
 import parser.MyParser;
 import utils.FileData;
+import utils.graph.*;
 import visitors.*;
 
 import java.io.File;
@@ -26,8 +26,8 @@ import static java.lang.String.format;
 
 public class Processor {
     private List<FileData> fileDataList;
-    private Graph graph;
-    private Set<String> linksCallGraph;
+    private AbstractGraph couplingGraph;
+    private AbstractGraph callGraph;
     List<String> classNames;
 
 
@@ -35,8 +35,8 @@ public class Processor {
      * Constructeur par défaut pour la classe {@link Processor}
      */
     public Processor() {
-        this.graph = new Graph();
-        this.linksCallGraph = new HashSet<>();
+        this.couplingGraph = new WeightedCouplingGraph();
+        this.callGraph = new CallGraph();
         this.fileDataList = new ArrayList<>();
         this.classNames = new ArrayList<>();
     }
@@ -52,13 +52,14 @@ public class Processor {
             fileData.getTypeDeclaration().accept(visitorMethod);
 
             callerClass = fileData.getFullClassName();
-            this.graph.addNode(callerClass);
+            this.couplingGraph.addNode(callerClass);
 
             for (MethodDeclaration nodeMethod : visitorMethod.getMethodDeclarationList()) {
                 MethodInvocationVisitor visitorMethodInvocation = new MethodInvocationVisitor();
                 nodeMethod.accept(visitorMethodInvocation);
 
                 caller = callerClass+"::"+nodeMethod.getName();
+                this.callGraph.addNode(caller);
 
                 for (MethodInvocation methodInvocation : visitorMethodInvocation.getMethodInvocations()) {
                     boolean b = false;
@@ -86,9 +87,10 @@ public class Processor {
                         b = true;
                     }
                     if (b) {
-                        this.linksCallGraph.add("\""+caller+"\"->\""+callee+"\"\n");
-                        this.graph.addNode(calleeClass);
-                        this.graph.addEdge(callerClass, calleeClass);
+                        this.couplingGraph.addNode(calleeClass);
+                        this.couplingGraph.addEdge(callerClass, calleeClass);
+                        this.callGraph.addNode(callee);
+                        this.callGraph.addEdge(caller, callee);
                     }
                 }
             }
@@ -96,12 +98,12 @@ public class Processor {
     }
 
     public float couplage(String classe1, String classe2) {
-        Graph.Edge edge = graph.findEdge(classe1, classe2);
-        float a = edge == null ? 0 : edge.getWeight();
+        Edge edge = couplingGraph.findEdge(classe1, classe2);
+        float a = edge == null ? 0 : ((WeightEdge) edge).getWeight();
         float b = 0;
-        for (Graph.Edge e :
-                graph.getEdges()) {
-            b += e.getWeight();
+        for (Edge e :
+                couplingGraph.getEdges()) {
+            b += ((WeightEdge) e).getWeight();
         }
         return a/b;
     }
@@ -189,7 +191,7 @@ public class Processor {
     public ICluster clusteringHierarchic() {
         int[] newBestClusterIndex;
         Cluster mainCluster = new Cluster();
-        List<String> classes = graph.getNodes();
+        List<String> classes = couplingGraph.getNodes();
         for (String className : classes) {
             SimpleCluster simpleCluster = new SimpleCluster(className);
             mainCluster.addCluster(simpleCluster);
@@ -251,8 +253,8 @@ public class Processor {
     public void writeCallGraphInDotFile(String fileGraphPath) throws IOException {
         FileWriter fW = new FileWriter(fileGraphPath);
         fW.write("digraph CallGraph {\n");
-        for (String link : linksCallGraph) {
-            fW.write(link);
+        for (Edge edge : callGraph.getEdges()) {
+            fW.write("\""+edge.getNode1()+"\"->\""+edge.getNode2()+"\"\n");
         }
         fW.write("}");
         fW.close();
@@ -261,10 +263,10 @@ public class Processor {
 
     public void writeWeightedCouplingGraphInDotFile(String fileGraphPath) throws IOException {
         FileWriter fW = new FileWriter(fileGraphPath);
-        fW.write("digraph CouplingGraph {\n");
+        fW.write("digraph WeightedCouplingGraph {\n");
         fW.write("edge[dir=none]\n");
-        for (Graph.Edge edge : graph.getEdges()) {
-            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", edge.getWeight())+"\n");
+        for (Edge edge : couplingGraph.getEdges()) {
+            fW.write("\""+edge.getNode1()+"\""+"->"+"\""+edge.getNode2()+"\""+ format(" [ label=\"%s\" ]", ((WeightEdge) edge).getWeight())+"\n");
         }
         fW.write("}");
         fW.close();
