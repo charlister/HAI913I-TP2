@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="création structure abstraite et générique de graphe &amp; conversion graphe d'appel -&gt; graphe de couplage pondéré.">
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraphNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedEdge.java" afterDir="false" />
+    <list default="true" id="6373c8c9-b43c-4166-bf4e-52b2cca0a1cc" name="Changes" comment="organisation des graphes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/processor/Processor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/processor/Processor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/Cluster.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/cluster/SimpleCluster.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/CallGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utils/graph/WeightedCouplingGraph.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +112,7 @@
       <workItem from="1667747832056" duration="6588000" />
       <workItem from="1667824985705" duration="19151000" />
       <workItem from="1667891378211" duration="4905000" />
-      <workItem from="1667915139420" duration="20756000" />
+      <workItem from="1667915139420" duration="43280000" />
     </task>
     <task id="LOCAL-00001" summary="calcul du couplage entre 2 classes">
       <created>1666262717603</created>
@@ -192,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667939352734</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="organisation des graphes">
+      <created>1667949136559</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1667949136559</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,6 +227,7 @@
     <MESSAGE value="edition de la méthoded calculateCouplingBetweenClusters" />
     <MESSAGE value="Gestion des graphes à partir de deux sous-graphes" />
     <MESSAGE value="création structure abstraite et générique de graphe &amp; conversion graphe d'appel -&gt; graphe de couplage pondéré." />
-    <option name="LAST_COMMIT_MESSAGE" value="création structure abstraite et générique de graphe &amp; conversion graphe d'appel -&gt; graphe de couplage pondéré." />
+    <MESSAGE value="organisation des graphes" />
+    <option name="LAST_COMMIT_MESSAGE" value="organisation des graphes" />
   </component>
 </project>

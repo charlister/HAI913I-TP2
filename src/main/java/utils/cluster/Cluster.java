@@ -24,6 +24,10 @@ public class Cluster implements ICluster {
         this.subClusters.add(cluster);
     }
 
+    public void removeCluster(int clusterIndex) {
+        this.subClusters.remove(clusterIndex);
+    }
+
     public List<ICluster> getSubClusters() {
         return subClusters;
     }
@@ -31,12 +35,12 @@ public class Cluster implements ICluster {
     @Override
     public String toString() {
         StringBuilder clusterStrBuilder = new StringBuilder();
-        clusterStrBuilder.append("( ");
+        clusterStrBuilder.append("(");
         int clusterSize = this.subClusters.size();
         for (int i = 0; i < clusterSize; i++) {
             clusterStrBuilder.append((i != 0 ? ", " : "") + this.subClusters.get(i).toString());
         }
-        clusterStrBuilder.append(" )");
+        clusterStrBuilder.append(")");
         return  clusterStrBuilder.toString();
     }
 }

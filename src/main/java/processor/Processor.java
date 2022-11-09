@@ -95,10 +95,15 @@ public class Processor {
                         b = true;
                     }
                     if (b) {
-                        this.couplingGraph.addNode(new Node(calleePackage, calleeClass));
-                        this.couplingGraph.addEdge(new Node(callerPackage, callerClass), new Node(calleePackage, calleeClass));
                         this.callGraph.addNode(new CallGraphNode(calleePackage, calleeClass, calleeMethod));
                         this.callGraph.addEdge(new CallGraphNode(callerPackage, callerClass, callerMethod), new CallGraphNode(calleePackage, calleeClass, calleeMethod));
+
+
+                        if (!(callerPackage+"."+callerClass).equals(calleePackage+"."+calleeClass)) {
+                            this.couplingGraph.addNode(new Node(calleePackage, calleeClass));
+                            this.couplingGraph.addEdge(new Node(callerPackage, callerClass), new Node(calleePackage, calleeClass));
+                        }
+
                     }
                 }
             }
@@ -117,54 +122,21 @@ public class Processor {
     }
 
     /* EXERCICE 2 */
-
-//    public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
-//        float result = 0;
-//        float divisor = 0;
-//
-//        List<String> monoClusters1 = cluster1.getClusterClasses();
-//        List<String> monoClusters2 = cluster2.getClusterClasses();
-//        List<String> monoClusters = new ArrayList<>();
-//        monoClusters.addAll(monoClusters1);
-//        monoClusters.addAll(monoClusters2);
-//        int n = monoClusters.size();
-//
-//        for (int i = 0; i < n; i++) {
-//            for (int j = 0; j < n; j++) {
-//                if (i==j)
-//                    break;
-//                float tmp = couplage(monoClusters.get(i), monoClusters.get(j));
-//                result += tmp;
-//                divisor++;
-//            }
-//        }
-//
-////        for (String classMonoClusters1 : monoClusters) {
-////            for (String classMonoClusters2 : monoClusters) {
-////                if (!classMonoClusters1.equals(classMonoClusters2)) {
-////                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
-////                    result += tmp;
-////                    divisor++;
-////                }
-////            }
-////        }
-//
-//        result /= divisor;
-//        System.err.println(format("(%s ; %s) = %f", cluster1, cluster2, result));
-//
-//        return result;
-//    }
     public float calculateCouplingBetweenClusters (ICluster cluster1, ICluster cluster2) {
         float result = 0;
         float divisor = 0;
 
-        List<String> monoClusters1 = cluster1.getClusterClasses();
-        List<String> monoClusters2 = cluster2.getClusterClasses();
-
-        for (String classMonoClusters1 : monoClusters1) {
-            for (String classMonoClusters2 : monoClusters2) {
-                if (!classMonoClusters1.equals(classMonoClusters2)) {
-                    float tmp = couplage(classMonoClusters1, classMonoClusters2);
+        List<String> monoClusters = new ArrayList<>();
+        monoClusters.addAll(cluster1.getClusterClasses());
+        monoClusters.addAll(cluster2.getClusterClasses());
+        int n = monoClusters.size();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i==j) {
+                    j = n;
+                }
+                else {
+                    float tmp = couplage(monoClusters.get(i), monoClusters.get(j));
                     result += tmp;
                     divisor++;
                 }
@@ -196,7 +168,7 @@ public class Processor {
         return newBestClusterIndex;
     }
 
-    public ICluster clusteringHierarchic() {
+    public ICluster clusteringHierarchic() throws InterruptedException {
         int[] newBestClusterIndex;
         Cluster mainCluster = new Cluster();
         List<String> classes = couplingGraph.getNodes()
@@ -214,10 +186,13 @@ public class Processor {
             Cluster newBestCluster = new Cluster();
             newBestCluster.addCluster(mainCluster.getSubClusters().get(newBestClusterIndex[0]));
             newBestCluster.addCluster(mainCluster.getSubClusters().get(newBestClusterIndex[1]));
+
+            int index1 = newBestClusterIndex[1];
+            boolean decreaseIndex1 = index1>0;
             /*enlever c1*/
-            mainCluster.getSubClusters().remove(newBestClusterIndex[0]);
+            mainCluster.removeCluster(newBestClusterIndex[0]);
             /*enlever c2*/
-            mainCluster.getSubClusters().remove(newBestClusterIndex[1]-1);
+            mainCluster.removeCluster(newBestClusterIndex[1]-(decreaseIndex1 ? 1 : 0));
             /*ajouter c3*/
             mainCluster.addCluster(newBestCluster);
         }

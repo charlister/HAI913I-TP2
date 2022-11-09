@@ -1,6 +1,5 @@
 package utils.graph;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public class CallGraph extends AbstractGraph<CallGraphNode, Edge> {
@@ -34,7 +33,8 @@ public class CallGraph extends AbstractGraph<CallGraphNode, Edge> {
             newWeightedCouplingGraph.addNode(new Node(node.packageName, node.className));
         }
         for (Edge edge : this.edges) {
-            newWeightedCouplingGraph.addEdge(new Node(edge.node1.packageName, edge.node1.className), new Node(edge.node2.packageName, edge.node2.className));
+            if (!edge.node1.packageName.equals(edge.node2.packageName) || !edge.node1.className.equals(edge.node2.className))
+                newWeightedCouplingGraph.addEdge(new Node(edge.node1.packageName, edge.node1.className), new Node(edge.node2.packageName, edge.node2.className));
         }
         
         return newWeightedCouplingGraph;

@@ -26,6 +26,6 @@ public class SimpleCluster implements ICluster {
 
     @Override
     public String toString() {
-        return cluster;
+        return "( " + cluster + " )";
     }
 }
